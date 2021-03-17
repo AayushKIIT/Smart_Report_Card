@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+
+
+{% block body %}
+    <h1>Hello! {{student.first_name}} {{student.last_name}}</h1>
+    <h2>Branch:{{student.branch}} | Section:{{student.section}}</h2>
+    <a href = /attendance/{{student.id}}><button> Attendance</button> </a>
+{% endblock%}
+    
