@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_w_navbar.html' %}
 
 {% block head %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
@@ -6,37 +6,88 @@
 
 
 {% block body %}
-<canvas id="myChart" width="100" height="15px"></canvas>
+<section class="mx-auto ml-20 ">
+<section class="text-gray-600 body-font ">
+    <div class="container  py-2 mx-auto flex flex-col">
+      <div class="lg:w-4/6 mx-auto">
+        <div class="rounded-lg h-64 overflow-hidden container py-5 mx-auto flex flex-wrap h-full bg-gray-100 bg-opacity-75 rounded-lg overflow-hidden text-center relative">
+            <canvas id="myChart" width="110px" height="40px"></canvas>
+        </div>
+        <div class="pl-20 flex flex-col sm:flex-row mt-10 ml-50 flex mx-auto border-2 border-green-500 rounded overflow-hidden mt-6">
+          <div class="sm:w-1/2 text-center sm:pr-8 sm:py-8">
+            <div class="w-20 h-20 rounded-full inline-flex items-center justify-center bg-gray-200 text-gray-400">
+              <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10" viewBox="0 0 24 24">
+                <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </div>
+            <div class="flex flex-col items-center text-center justify-center ">
+              <h2 class="font-medium title-font mt-4 text-gray-900 text-lg">{{student.first_name}} {{student.last_name}}</h2>
+              <div class="w-12 h-1 bg-green-500 rounded mt-2 mb-4"></div>
+              <p class="text-base">{{student.branch}}</p>
+            </div>
+          </div>
+          <div class="sm:w-2/3 sm:pl-8 sm:py-8 sm:border-l border-gray-200 sm:border-t-0 border-t mt-4 pt-4 sm:mt-0 text-center sm:text-left">
+            {% if other_details.attendance_threshold %}
+            <div class="leading-relaxed text-lg mb-4 ">Current Semester's Attendance:<div class="leading-relaxed text-lg mb-4 text-green-700">{{other_details.current_semester}}%</div></div>
+            <p class="leading-relaxed text-lg mb-4 text-green-700"><b>Your Attendance is good</b></p>
+                {%else%}
+                <div class="leading-relaxed text-lg mb-4 ">Current Semester's Attendance:<div class="text-red-700 leading-relaxed text-lg mb-4">{{other_details.current_semester}}%</div></div>
+                    <p class="leading-relaxed text-lg mb-4 text-red-700"><b>Your Attendance is low</b></p>
+            {% endif %}
+          </div>
+          <div class="sm:w-2/3 sm:pl-8 sm:py-8 sm:border-l border-gray-200 sm:border-t-0 border-t mt-4 pt-4 sm:mt-0 text-center sm:text-left">
+            {% for each in data %}
+                {% if each >75 %}
+                  <p class="leading-relaxed text-lg mb-4 text-green-700">{{each}}%</p>
+                  {% elif each>70 and each <=75 %}
+                  <p class="leading-relaxed text-lg mb-4 text-yellow-500">{{each}}%</p>
+                  {% else %}
+                  <p class="leading-relaxed text-lg mb-4 text-red-700">{{each}}%</p>
+                {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  </section>
 <div>
 <script>
 var ctx = document.getElementById('myChart').getContext('2d');
 var myChart = new Chart(ctx, {
     type: 'line',
+    lineTension:0,
     data: {
         labels: {{labels | safe}},
         datasets: [{
             label: '% of attendance',
             data: {{data | safe}},
             backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-                'rgba(153, 102, 255, 0.2)',
-                'rgba(255, 159, 64, 0.2)'
+                'rgba(100, 200, 100, 0.8)',
+
             ],
             borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-                'rgba(153, 102, 255, 1)',
-                'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
+                'rgba(9,100, 9, 1)',
+            ],pointRadius:5,
+                    pointBorderColor:['rgba(10, 10,110,1)','rgba(2, 100,1,1)','rgba(100, 10,100,1)','rgba(255, 10,10,1)','rgba(255, 100,0,1)'],
+                    pointBorderWidth:2,
+                    pointStyle: 'circle',
+                    borderColor: [
+                        'rgba(3,150, 1, 1)',
+                    ],
+                    borderWidth: 1
         }]
     },
     options: {
+        layout: {
+            padding: {
+                left: 200,
+                right: 300,
+                top: 0,
+                bottom: 0
+            }
+        }
     }
 });
 </script>

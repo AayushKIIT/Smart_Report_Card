@@ -7,17 +7,49 @@
     <title>KIIT SMART REPORT</title>
     {% block head %}
     {%endblock %}
+    <a href="https://icons8.com/icon/50897/attendance"></a>
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body style="text-align: center;">
+    <header class="text-gray-600 body-font">
+        <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+          <nav class="flex lg:w-2/5 flex-wrap items-center text-base md:ml-auto">
+            <a href="/dashboard/{{student.id}}" class="p-2 mr-5 hover:text-gray-900 hover:bg-green-100 rounded text-base mt-4 md:mt-0">Dashboard</a>
+            <a href="/attendance/{{student.id}}" class="p-2 mr-5 hover:text-gray-900 hover:bg-green-100 rounded text-base mt-4 md:mt-0">Attendance</a>
+            <a href="/domain/{{student.id}}" class="p-2 mr-5 hover:text-gray-900 hover:bg-green-100 rounded text-base mt-4 md:mt-0">Domain</a>
+            <a href = "/semester/{{student.id}}" class="p-2 mr-5 hover:text-gray-900 hover:bg-green-100 rounded text-base mt-4 md:mt-0">Semesters</a>
+            <a href = "/subject_stats/{{student.id}}" class="p-2 mr hover:text-gray-900 hover:bg-green-100 rounded text-base mt-4 md:mt-0">Subject-stats</a>
+          </nav>
+          <a class="flex order-first lg:order-none lg:w-1/5 title-font font-medium items-center text-gray-900 lg:items-center lg:justify-center mb-4 md:mb-0">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-green-100 rounded-full" viewBox="0 0 24 24">
+              
+            </svg>
+            <span class="ml-3 text-xl">KIIT UNIVERSITY</span>
+          </a>
+          <div class="lg:w-2/5 inline-flex lg:justify-end ml-5 lg:ml-0 ">
+            <a href = '/'>
+            <button class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-green-100 rounded text-base mt-4 md:mt-0">Logout
+              <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 ml-1" viewBox="0 0 24 24">
+                <path d="M5 12h14M12 5l7 7-7 7"></path>
+              </svg>
+            </button>
+            </a>
+          </div>
+        </div>
+    </header>
     {% block body %}
     
+
+
+
+    
     {% endblock %}    
+    
     <footer class="text-gray-600 body-font">
         <div class="container px-5 py-8 mx-auto flex items-center sm:flex-row flex-col">
           <a class="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-green-500 rounded-full" viewBox="0 0 24 24">
-              
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-green-100 rounded-full" viewBox="0 0 24 24">
+             
             </svg>
             <span class="ml-3 text-xl">KIIT UNIVERSITY</span>
           </a>
@@ -41,7 +73,7 @@
                 <path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zm1.5-4.87h.01"></path>
               </svg>
             </a>
-            <a  href="https://www.linkedin.com/school/kiituniversity/" class="ml-3 text-gray-500">
+            <a href="https://www.linkedin.com/school/kiituniversity/" class="ml-3 text-gray-500">
               <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="0" class="w-5 h-5" viewBox="0 0 24 24">
                 <path stroke="none" d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"></path>
                 <circle cx="4" cy="4" r="2" stroke="none"></circle>

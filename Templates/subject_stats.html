@@ -1,0 +1,641 @@
+{% extends 'base_w_navbar.html' %}
+{% block head %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
+{% endblock %}
+{% block body %}
+
+<!-- *user interface is designed here -->
+<!-- ? CS -->
+<section class="text-gray-600 body-font ">
+    <div class="container px-5 py-5 mx-auto flex flex-wrap h-full bg-gray-100 bg-opacity-75 px-5 rounded-lg overflow-hidden text-center relative">
+      <h1 class="sm:text-4xl text-center text-3xl font-medium title-font mb-2 text-gray-900">Computer Science</h1>
+      <div class="flex flex-wrap w-full">
+        <div class="lg:w-2/5 md:w-1/2 md:pr-10 md:py-6">
+          <div class="flex relative pb-12">
+            <div class="h-full w-10 absolute inset-0 flex items-center justify-center">
+              <div class="h-full w-1 bg-gray-200 pointer-events-none"></div>
+            </div>
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-500 inline-flex items-center justify-center text-white relative z-10">
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                    <path d="M22 4L12 14.01l-3-3"></path>
+                  </svg>
+            </div>
+            <div class="flex-grow pl-4">
+              <h2 class="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">Strongest Subject</h2>
+              <p class="leading-relaxed">{{mx["CS"]}}</p>
+            </div>
+          </div>
+          <div class="flex relative pb-12">
+            <div class="h-full w-10 absolute inset-0 flex items-center justify-center">
+              <div class="h-full w-1 bg-gray-200 pointer-events-none"></div>
+            </div>
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-500 inline-flex items-center justify-center text-white relative z-10">
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                    <path d="M22 4L12 14.01l-3-3"></path>
+                  </svg>
+            </div>
+            <div class="flex-grow pl-4">
+                <h2 class="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">You also performed well in</h2>
+                {% if good_consistent["CS"] | length !=0 %}
+                    {% for each in good_consistent["CS"] %}
+                        <p class="leading-relaxed">{{each}}</p>
+                    {% endfor %}
+                {% else %}
+                    <p class="leading-relaxed">no subjects</p>
+                {% endif %}
+            </div>
+          </div>
+          <div class="flex relative pb-12">
+            <div class="h-full w-10 absolute inset-0 flex items-center justify-center">
+              <div class="h-full w-1 bg-gray-200 pointer-events-none"></div>
+            </div>
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-500 inline-flex items-center justify-center text-white relative z-10">
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                    <path d="M22 4L12 14.01l-3-3"></path>
+                  </svg>
+            </div>
+            <div class="flex-grow pl-4">
+                <h2 class="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">You could've improved in</h2>
+                {% if bad_consistent["CS"] | length !=0 %}
+                    {% for each in bad_consistent["CS"] %}
+                        <p class="leading-relaxed">{{each}}</p>
+                    {% endfor %}
+                {% else %}
+                    <p class="leading-relaxed">no subjects</p>
+                {% endif %}
+            </div>
+          </div>
+          <div class="flex relative pb-12">
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-500 inline-flex items-center justify-center text-white relative z-10">
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                    <path d="M22 4L12 14.01l-3-3"></path>
+                  </svg>
+            </div>
+            <div class="flex-grow pl-4">
+              <h2 class="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">Weakest Subject</h2>
+              <p class="leading-relaxed">{{mn["CS"]}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="lg:w-3/5 md:w-1/2 object-cover object-center rounded-lg md:mt-10 mt-12"> <canvas id="cs_chart" width="100" height="50"></canvas> </div>
+      </div>
+    </div>
+  </section>
+<!-- ?EC -->
+<section class="text-gray-600 body-font pt-10">
+    <div class="container px-5 py-5 mx-auto flex flex-wrap h-full bg-gray-100 bg-opacity-75 px-5 rounded-lg overflow-hidden text-center relative">
+      <h1 class="sm:text-4xl text-center text-3xl font-medium title-font mb-2 text-gray-900">Electronics</h1>
+      <div class="flex flex-wrap w-full">
+        <div class="lg:w-2/5 md:w-1/2 md:pr-10 md:py-6">
+          <div class="flex relative pb-12">
+            <div class="h-full w-10 absolute inset-0 flex items-center justify-center">
+              <div class="h-full w-1 bg-gray-200 pointer-events-none"></div>
+            </div>
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-500 inline-flex items-center justify-center text-white relative z-10">
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                    <path d="M22 4L12 14.01l-3-3"></path>
+                  </svg>
+            </div>
+            <div class="flex-grow pl-4">
+              <h2 class="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">Strongest Subject</h2>
+              <p class="leading-relaxed">{{mx["EC"]}}</p>
+            </div>
+          </div>
+          <div class="flex relative pb-12">
+            <div class="h-full w-10 absolute inset-0 flex items-center justify-center">
+              <div class="h-full w-1 bg-gray-200 pointer-events-none"></div>
+            </div>
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-500 inline-flex items-center justify-center text-white relative z-10">
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                    <path d="M22 4L12 14.01l-3-3"></path>
+                  </svg>
+            </div>
+            <div class="flex-grow pl-4">
+                <h2 class="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">You also performed well in</h2>
+                {% if good_consistent["EC"] | length !=0 %}
+                    {% for each in good_consistent["EC"] %}
+                        <p class="leading-relaxed">{{each}}</p>
+                    {% endfor %}
+                {% else %}
+                    <p class="leading-relaxed">no subjects</p>
+                {% endif %}
+            </div>
+          </div>
+          <div class="flex relative pb-12">
+            <div class="h-full w-10 absolute inset-0 flex items-center justify-center">
+              <div class="h-full w-1 bg-gray-200 pointer-events-none"></div>
+            </div>
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-500 inline-flex items-center justify-center text-white relative z-10">
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                    <path d="M22 4L12 14.01l-3-3"></path>
+                  </svg>
+            </div>
+            <div class="flex-grow pl-4">
+                <h2 class="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">You could've improved in</h2>
+                {% if bad_consistent["EC"] | length !=0 %}
+                    {% for each in bad_consistent["EC"] %}
+                        <p class="leading-relaxed">{{each}}</p>
+                    {% endfor %}
+                {% else %}
+                    <p class="leading-relaxed">no subjects</p>
+                {% endif %}
+            </div>
+          </div>
+          <div class="flex relative pb-12">
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-500 inline-flex items-center justify-center text-white relative z-10">
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                    <path d="M22 4L12 14.01l-3-3"></path>
+                  </svg>
+            </div>
+            <div class="flex-grow pl-4">
+              <h2 class="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">Weakest Subject</h2>
+              <p class="leading-relaxed">{{mn["EC"]}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="lg:w-3/5 md:w-1/2 object-cover object-center rounded-lg md:mt-10 mt-12"> <canvas id="ec_chart" width="100" height="50"></canvas> </div>
+      </div>
+    </div>
+  </section>
+<!-- ?IT -->
+<section class="text-gray-600 body-font pt-10">
+    <div class="container px-5 py-5 mx-auto flex flex-wrap h-full bg-gray-100 bg-opacity-75 px-5 rounded-lg overflow-hidden text-center relative">
+      <h1 class="sm:text-4xl text-center text-3xl font-medium title-font mb-2 text-gray-900">Information Technology</h1>
+      <div class="flex flex-wrap w-full">
+        <div class="lg:w-2/5 md:w-1/2 md:pr-10 md:py-6">
+          <div class="flex relative pb-12">
+            <div class="h-full w-10 absolute inset-0 flex items-center justify-center">
+              <div class="h-full w-1 bg-gray-200 pointer-events-none"></div>
+            </div>
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-500 inline-flex items-center justify-center text-white relative z-10">
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                    <path d="M22 4L12 14.01l-3-3"></path>
+                  </svg>
+            </div>
+            <div class="flex-grow pl-4">
+              <h2 class="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">Strongest Subject</h2>
+              <p class="leading-relaxed">{{mx["IT"]}}</p>
+            </div>
+          </div>
+          <div class="flex relative pb-12">
+            <div class="h-full w-10 absolute inset-0 flex items-center justify-center">
+              <div class="h-full w-1 bg-gray-200 pointer-events-none"></div>
+            </div>
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-500 inline-flex items-center justify-center text-white relative z-10">
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                    <path d="M22 4L12 14.01l-3-3"></path>
+                  </svg>
+            </div>
+            <div class="flex-grow pl-4">
+                <h2 class="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">You also performed well in</h2>
+                {% if good_consistent["IT"] | length !=0 %}
+                    {% for each in good_consistent["IT"] %}
+                        <p class="leading-relaxed">{{each}}</p>
+                    {% endfor %}
+                {% else %}
+                    <p class="leading-relaxed">no subjects</p>
+                {% endif %}
+            </div>
+          </div>
+          <div class="flex relative pb-12">
+            <div class="h-full w-10 absolute inset-0 flex items-center justify-center">
+              <div class="h-full w-1 bg-gray-200 pointer-events-none"></div>
+            </div>
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-500 inline-flex items-center justify-center text-white relative z-10">
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                    <path d="M22 4L12 14.01l-3-3"></path>
+                  </svg>
+            </div>
+            <div class="flex-grow pl-4">
+                <h2 class="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">You could've improved in</h2>
+                {% if bad_consistent["IT"] | length !=0 %}
+                    {% for each in bad_consistent["IT"] %}
+                        <p class="leading-relaxed">{{each}}</p>
+                    {% endfor %}
+                {% else %}
+                    <p class="leading-relaxed">no subjects</p>
+                {% endif %}
+            </div>
+          </div>
+          <div class="flex relative pb-12">
+            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-500 inline-flex items-center justify-center text-white relative z-10">
+                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                    <path d="M22 4L12 14.01l-3-3"></path>
+                  </svg>
+            </div>
+            <div class="flex-grow pl-4">
+              <h2 class="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">Weakest Subject</h2>
+              <p class="leading-relaxed">{{mn["IT"]}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="lg:w-3/5 md:w-1/2 object-cover object-center rounded-lg md:mt-10 mt-12"> <canvas id="it_chart" width="100" height="50"></canvas> </div>
+      </div>
+    </div>
+  </section>
+<!-- ?HS -->
+<section class="text-gray-600 body-font pt-10">
+  <div class="container px-5 py-5 mx-auto flex flex-wrap h-full bg-gray-100 bg-opacity-75 px-5 rounded-lg overflow-hidden text-center relative">
+    <h1 class="sm:text-4xl text-center text-3xl font-medium title-font mb-2 text-gray-900">Management and Communication</h1>
+    <div class="flex flex-wrap w-full">
+      <div class="lg:w-2/5 md:w-1/2 md:pr-10 md:py-6">
+        <div class="flex relative pb-12">
+          <div class="h-full w-10 absolute inset-0 flex items-center justify-center">
+            <div class="h-full w-1 bg-gray-200 pointer-events-none"></div>
+          </div>
+          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-500 inline-flex items-center justify-center text-white relative z-10">
+              <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                  <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                  <path d="M22 4L12 14.01l-3-3"></path>
+                </svg>
+          </div>
+          <div class="flex-grow pl-4">
+            <h2 class="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">Strongest Subject</h2>
+            <p class="leading-relaxed">{{mx["HS"]}}</p>
+          </div>
+        </div>
+        <div class="flex relative pb-12">
+          <div class="h-full w-10 absolute inset-0 flex items-center justify-center">
+            <div class="h-full w-1 bg-gray-200 pointer-events-none"></div>
+          </div>
+          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-500 inline-flex items-center justify-center text-white relative z-10">
+              <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                  <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                  <path d="M22 4L12 14.01l-3-3"></path>
+                </svg>
+          </div>
+          <div class="flex-grow pl-4">
+              <h2 class="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">You also performed well in</h2>
+              {% if good_consistent["HS"] | length !=0 %}
+                  {% for each in good_consistent["HS"] %}
+                      <p class="leading-relaxed">{{each}}</p>
+                  {% endfor %}
+              {% else %}
+                  <p class="leading-relaxed">no subjects</p>
+              {% endif %}
+          </div>
+        </div>
+        <div class="flex relative pb-12">
+          <div class="h-full w-10 absolute inset-0 flex items-center justify-center">
+            <div class="h-full w-1 bg-gray-200 pointer-events-none"></div>
+          </div>
+          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-500 inline-flex items-center justify-center text-white relative z-10">
+              <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                  <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                  <path d="M22 4L12 14.01l-3-3"></path>
+                </svg>
+          </div>
+          <div class="flex-grow pl-4">
+              <h2 class="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">You could've improved in</h2>
+              {% if bad_consistent["HS"] | length !=0 %}
+                  {% for each in bad_consistent["HS"] %}
+                      <p class="leading-relaxed">{{each}}</p>
+                  {% endfor %}
+              {% else %}
+                  <p class="leading-relaxed">no subjects</p>
+              {% endif %}
+          </div>
+        </div>
+        <div class="flex relative pb-12">
+          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-500 inline-flex items-center justify-center text-white relative z-10">
+              <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                  <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                  <path d="M22 4L12 14.01l-3-3"></path>
+                </svg>
+          </div>
+          <div class="flex-grow pl-4">
+            <h2 class="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">Weakest Subject</h2>
+            <p class="leading-relaxed">{{mn["HS"]}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="lg:w-3/5 md:w-1/2 object-cover object-center rounded-lg md:mt-10 mt-12"> <canvas id="hs_chart" width="100" height="50"></canvas> </div>
+    </div>
+  </div>
+</section>
+<!-- ?MA -->
+<section class="text-gray-600 body-font pt-10">
+  <div class="container px-5 py-5 mx-auto flex flex-wrap h-full bg-gray-100 bg-opacity-75 px-5 rounded-lg overflow-hidden text-center relative">
+    <h1 class="sm:text-4xl text-center text-3xl font-medium title-font mb-2 text-gray-900">Mathematics</h1>
+    <div class="flex flex-wrap w-full">
+      <div class="lg:w-2/5 md:w-1/2 md:pr-10 md:py-6">
+        <div class="flex relative pb-12">
+          <div class="h-full w-10 absolute inset-0 flex items-center justify-center">
+            <div class="h-full w-1 bg-gray-200 pointer-events-none"></div>
+          </div>
+          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-500 inline-flex items-center justify-center text-white relative z-10">
+              <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                  <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                  <path d="M22 4L12 14.01l-3-3"></path>
+                </svg>
+          </div>
+          <div class="flex-grow pl-4">
+            <h2 class="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">Strongest Subject</h2>
+            <p class="leading-relaxed">{{mx["MA"]}}</p>
+          </div>
+        </div>
+        <div class="flex relative pb-12">
+          <div class="h-full w-10 absolute inset-0 flex items-center justify-center">
+            <div class="h-full w-1 bg-gray-200 pointer-events-none"></div>
+          </div>
+          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-500 inline-flex items-center justify-center text-white relative z-10">
+              <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                  <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                  <path d="M22 4L12 14.01l-3-3"></path>
+                </svg>
+          </div>
+          <div class="flex-grow pl-4">
+              <h2 class="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">You also performed well in</h2>
+              {% if good_consistent["MA"] | length !=0 %}
+                  {% for each in good_consistent["MA"] %}
+                      <p class="leading-relaxed">{{each}}</p>
+                  {% endfor %}
+              {% else %}
+                  <p class="leading-relaxed">no subjects</p>
+              {% endif %}
+          </div>
+        </div>
+        <div class="flex relative pb-12">
+          <div class="h-full w-10 absolute inset-0 flex items-center justify-center">
+            <div class="h-full w-1 bg-gray-200 pointer-events-none"></div>
+          </div>
+          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-500 inline-flex items-center justify-center text-white relative z-10">
+              <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                  <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                  <path d="M22 4L12 14.01l-3-3"></path>
+                </svg>
+          </div>
+          <div class="flex-grow pl-4">
+              <h2 class="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">You could've improved in</h2>
+              {% if bad_consistent["MA"] | length !=0 %}
+                  {% for each in bad_consistent["MA"] %}
+                      <p class="leading-relaxed">{{each}}</p>
+                  {% endfor %}
+              {% else %}
+                  <p class="leading-relaxed">no subjects</p>
+              {% endif %}
+          </div>
+        </div>
+        <div class="flex relative pb-12">
+          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-500 inline-flex items-center justify-center text-white relative z-10">
+              <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                  <path d="M22 11.08V12a10 10 0 11-5.93-9.14"></path>
+                  <path d="M22 4L12 14.01l-3-3"></path>
+                </svg>
+          </div>
+          <div class="flex-grow pl-4">
+            <h2 class="font-medium title-font text-sm text-gray-900 mb-1 tracking-wider">Weakest Subject</h2>
+            <p class="leading-relaxed">{{mn["MA"]}}</p>
+          </div>
+        </div>
+      </div>
+      <div class="lg:w-3/5 md:w-1/2 object-cover object-center rounded-lg"> <canvas id="ma_chart" width="100" height="50"></canvas> </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+<!-- ! JS codes start here! CAUTION -->
+
+<script>
+
+var ctx = document.getElementById('cs_chart').getContext('2d');
+var cs_chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{CS_dict["labels"] | safe}},
+        datasets: [{
+            label: 'Performance in each subject.',
+            data: {{CS_dict["data"] | safe}},
+            backgroundColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        },
+        legend: {
+            display: false,
+            labels: {
+                fontColor: 'rgb(255, 99, 132)'
+            }
+        }
+    }
+});
+</script>
+
+<script>
+var ctx = document.getElementById('ec_chart').getContext('2d');
+var ec_chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{EC_dict["labels"] | safe}},
+        datasets: [{
+            label: 'Performance in each subject.',
+            data: {{EC_dict["data"] | safe}},
+            backgroundColor: [
+              'rgba(75, 192, 192, 1)',
+              'rgba(75, 190, 100, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(255, 99, 132, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(153, 202, 100, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(153, 102, 255, 1)',
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        },
+        legend: {
+            display: false,
+            labels: {
+                fontColor: 'rgb(255, 99, 132)'
+            }
+        }
+    }
+});
+</script>
+
+<script>
+var ctx = document.getElementById('it_chart').getContext('2d');
+var it_chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{IT_dict["labels"] | safe}},
+        datasets: [{
+            label: 'Performance in each subject.',
+            data: {{IT_dict["data"] | safe}},
+            backgroundColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                    suggestedMax: 1
+                }
+            }]
+        },
+        legend: {
+            display: false,
+            labels: {
+                fontColor: 'rgb(255, 99, 132)'
+            }
+        }
+    }
+});
+</script>
+
+<script>
+var ctx = document.getElementById('hs_chart').getContext('2d');
+var hs_chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{HS_dict["labels"] | safe}},
+        datasets: [{
+            label: 'Performance in each subject.',
+            data: {{HS_dict["data"] | safe}},
+            backgroundColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        },
+        legend: {
+            display: false,
+            labels: {
+                fontColor: 'rgb(255, 99, 132)'
+            }
+        }
+    }
+});
+</script>
+
+<script>
+var ctx = document.getElementById('ma_chart').getContext('2d');
+var ma_chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: {{MA_dict["labels"] | safe}},
+        datasets: [{
+            label: 'Performance in each subject.',
+            data: {{MA_dict["data"] | safe}},
+            backgroundColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        },
+        legend: {
+            display: false,
+            labels: {
+                fontColor: 'rgb(255, 99, 132)'
+            }
+        }
+    }
+});
+</script>
+
+{% endblock %}

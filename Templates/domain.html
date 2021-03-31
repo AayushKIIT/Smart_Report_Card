@@ -1,0 +1,50 @@
+{% extends 'base_w_navbar.html' %}
+{% block head %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
+{% endblock %}
+{% block body %} 
+<section class="text-gray-600 body-font">
+    <div class="container mx-auto flex px-5 py-10 items-center justify-center flex-col flex mx-auto border-2 border-green-500 rounded overflow-hidden mt-6rounded-lg h-64 overflow-hidden container py-5 mx-auto flex flex-wrap h-full bg-gray-100 bg-opacity-75 rounded-lg overflow-hidden text-center relative">
+        <canvas id="myChart" width="100px" height="25px"></canvas>
+      <div class="text-center lg:w-2/3 w-full py-10">
+        <h1 class="title-font sm:text-4xl text-3xl mb-2 font-medium text-gray-900"><p> Wow! {{student.first_name}}, you are really good in {{strong_domain}}.</p></h1>
+        <p class="mb-8 leading-relaxed text-green-600">Based on your past records and performances we analysed your performance in each domain your course comprise of and we found out that if you pursue your career directed more towards <b>{{strong_domain}}</b> then there stands a great chance that you will perform very well and accomplish your goals.</p>
+        <p class="mb-5 leading-relaxed text-red-400">You really have to work on your <b>{{weak_domain}}</b> domain, we found you really slugish there.</p>
+      </div>
+    </div>
+</section>
+<script>
+    var ctx = document.getElementById('myChart').getContext('2d');
+
+    var myChart = new Chart(ctx, {
+        type: 'radar',
+        data: {
+            labels: {{labels | safe}},
+            datasets: [{
+                label: 'performance in each domain',
+                data: {{data | safe}},
+                backgroundColor: [
+                    'rgba(12, 255, 50, 0.2)',
+                    
+                ],pointRadius:5,pointBorderColor:['rgba(10, 10,150,0.8)','rgba(2, 200,1,0.8)','rgba(202, 10,180,0.8)','rgba(255, 100,10,0.8)','rgba(255, 200,0,0.8)'],
+                pointStyle: 'circle',
+                borderColor: [
+                    'rgba(3,150, 1, 1)',
+                ],
+                borderWidth: 3
+            }]
+        },
+        options: {
+            scale: {
+                pointLabels: {
+                    fontSize: 18
+                },
+                ticks: {
+                    suggestedMax: 1
+                }
+            }
+
+        }
+    });
+    </script>
+{% endblock %}

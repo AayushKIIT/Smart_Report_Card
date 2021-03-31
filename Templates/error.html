@@ -5,6 +5,17 @@
 {% endblock %}
 
 {% block body %}
- <p> Please check the roll number you have entered. </p>
- <a href="/"> click here to view your report card</a>
+<section class="text-gray-600 body-font">
+    <div class="container mx-auto flex flex-col px-5 justify-center items-center">
+      <img class="lg:w-1/5 md:w-1/6 w-1/6 mb-4 mt-20 object-cover object-center rounded" alt="hero" src="/static/Images/error.png">
+      <div class="w-full md:w-2/3 flex flex-col mb-16 items-center text-center">
+        <h1 class="title-font sm:text-4xl text-3xl mb font-medium text-gray-900">Ah, Snap! Could you please try again?</h1>
+        <p class="mb-8 leading-relaxed">It seems like there is some kind of problem with your login credentials.</p>
+        <div class="flex w-full justify-center items-end">
+          <a href="/"><button class="inline-flex text-white bg-green-500 border-0 px-6 py-2 focus:outline-none hover:bg-green-600 rounded text-lg">Try again</button></a>
+        </div>
+        <p class="text-sm mt-2 text-gray-500 mb-20 w-full mb-40">Please try again.</p>
+      </div>
+    </div>
+  </section>
 {% endblock %}

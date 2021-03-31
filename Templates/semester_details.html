@@ -1,0 +1,90 @@
+{% extends 'base_w_navbar.html' %}
+{% block head %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js" integrity="sha512-d9xgZrVZpmmQlfonhQUvTR7lMPtO7NkZMkA0ABN3PHCbKA5nqylQ/yWlFAyY6hYgdF1Qh6nYiuADWwKB4C2WSw==" crossorigin="anonymous"></script>
+{% endblock %}
+{% block body %}
+<section class="text-gray-600 body-font overflow-hidden mb-20">
+    <div class="container px-5 py-24 mx-auto">
+      <div class="lg:w-4/5 mx-auto flex flex-wrap">
+        <div class="lg:w-1/2 w-full lg:pr-10 lg:py-6 mb-2 lg:mb-0">
+          <h2 class="text-sm title-font text-gray-500 tracking-widest ">This is how you performed in your previous semesters Mr. {{student.last_name}}</h2>
+          {% if semester.Sem5 >= 9 %}
+            <h1 class="text-green-600 text-3xl title-font font-light mb-2"> Your current <b>CGPA({{semester.Sem5}})</b> is excellent!, Keep up the good work </h1>
+            {% elif  semester.Sem5 >=8 and semester.Sem5<9 %}
+                <h1 class="text-blue-500 text-3xl title-font font-light mb-2"> Your current <b>CGPA({{semester.Sem5}})</b> is good but You need to work on some areas!</h1>
+            {% elif  semester.Sem5 >=7 and semester.Sem5 <8 %}
+                <h1 class="text-orange-700 text-3xl title-font font-light mb-2"> Your current <b>CGPA({{semester.Sem5}})</b> is average,You need to work on it!</h1>
+            {% else %}
+            <h1 class="text-orange-700 text-3xl title-font font-light mb-1"> Your current <b>CGPA({{semester.Sem5}})</b> is very poor,start studying!</h1>
+          {%endif%}
+          
+          <div class="flex mt-4 mb-4">
+            <a class="flex-grow text-green-500 border-b-2 border-green-500 py-1 text-lg px-1">Your performances</a>
+          </div>
+          <p class="leading-relaxed mb-4">Your all time <b>best performance</b> was <b> {{data | max}} </b> in {{best_performance.semester}} </p>
+          {% for label in labels %}
+            <div class="flex mx-auto border-2 border-green-500 rounded overflow-hidden mb-1 flex border-t border-gray-200 py-2 container px-2 mx-auto flex flex-wrap bg-gray-100 bg-opacity-75 rounded-lg overflow-hidden text-center relative">
+            <span class="text-gray-500 ">{{label}}</span>
+            {% if data_dict[label] >= 9 %}
+                    <span class="ml-auto text-green-700 font-bold px-2">{{data_dict[label]}}</span>
+                {% elif  data_dict[label] >=8 and data_dict[label]<9 %}
+                    <span class="ml-auto text-blue-600 px-2">{{data_dict[label]}}</span>
+                {% elif  data_dict[label] >=7 and data_dict[label] <8 %}
+                    <span class="ml-auto text-yellow-900 px-2">{{data_dict[label]}}</span>
+                {% else %}
+                    <span class="ml-auto text-red-500">{{data_dict[label]}}</span>
+            {%endif%}
+            </div>
+          {% endfor %}
+          <div class="flex">
+          </div>
+        </div>
+        <div class="mt-20 lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded mb-12 rounded-lg h-64 overflow-hidden container px-5 mx-auto flex flex-wrap h-full bg-gray-100 bg-opacity-75 rounded-lg overflow-hidden text-center relative"">
+            <canvas id="myChart" width="400" height="250"></canvas> 
+          </div>
+      </div>
+    </div>
+  </section>
+ 
+  
+
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            lineTension:0,
+            data: {
+                labels: {{labels | safe}},
+                datasets: [{
+                    label: 'CGPA',
+                    data: {{data | safe}},
+                    backgroundColor: [
+                        'rgba(255, 255, 255, 0)',
+        
+                    ],
+                    
+                    lineTension:0
+                
+                    ,pointRadius:5,
+                    pointBorderColor:['rgba(10, 10,150,0.5)','rgba(2, 200,10,0.5)','rgba(202, 10,180,0.5)','rgba(255, 100,10,0.5)','rgba(255, 10,10,0.5)'],
+                    pointBorderWidth:6,
+                    pointStyle: 'arrow',
+                    borderColor: [
+                        'rgba(3,150, 1, 1)',
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    suggestedMin: 7,
+                    suggestedMax: 10
+                }
+            }]
+        }
+    }
+        });
+        </script>
+{% endblock %}
